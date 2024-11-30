@@ -15,6 +15,15 @@ type Entry = {
   projectName: string;
 };
 
+const formatTime = (hours: number) => {
+  const h = Math.floor(hours);
+  const m = Math.floor((hours - h) * 60);
+  const s = Math.floor(((hours - h) * 60 - m) * 60);
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(
+    s
+  ).padStart(2, "0")}`;
+};
+
 const getTotalHoursPerDay = (entries: Entry[]) => {
   const daysOfWeek = [
     { name: "Mon", index: 1 },
@@ -34,7 +43,7 @@ const getTotalHoursPerDay = (entries: Entry[]) => {
     const startTime = dayjs(entry.startTime);
     const endTime = dayjs(entry.endTime);
 
-    const hours = endTime.diff(startTime, "hour", true);
+    const hours = endTime.diff(startTime, "hour", true); // get decimal hours
     console.log({ hours });
 
     const day = startTime.format("ddd, MMM D");
@@ -52,14 +61,19 @@ const getTotalHoursPerDay = (entries: Entry[]) => {
     return {
       day: name,
       hours: hoursByDay[formattedDay] || 0,
+      formattedTime: formatTime(hoursByDay[formattedDay] || 0),
     };
   });
 
   return completeHoursByDay;
 };
 
-const sumarHoras = (dias: { day: string; hours: number }[]) => {
-  return dias.reduce((total, dia) => total + dia.hours, 0);
+const sumHours = (days: { day: string; hours: number }[]) => {
+  return days.reduce((total, item) => total + item.hours, 0);
+};
+
+const formatTotalHours = (totalHours: number) => {
+  return formatTime(totalHours);
 };
 
 export const Reports = () => {
@@ -68,17 +82,15 @@ export const Reports = () => {
   const [totalHours, setTotalHours] = useState<number>(0);
 
   useEffect(() => {
-    const requestOptions: RequestInit = {
-      method: "GET",
-      redirect: "follow",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
-    };
-
     fetch(
       "https://faithful-literate-chigger.ngrok-free.app/api/v1/time-entries/get-all",
-      requestOptions
+      {
+        method: "GET",
+        redirect: "follow",
+        headers: new Headers({
+          "ngrok-skip-browser-warning": "69420",
+        }),
+      }
     )
       .then((response) => response.json())
       .then((result) => {
@@ -94,7 +106,7 @@ export const Reports = () => {
   useEffect(() => {
     const totalData = getTotalHoursPerDay(listData);
     setData(totalData);
-    setTotalHours(sumarHoras(totalData));
+    setTotalHours(sumHours(totalData));
   }, [listData]);
 
   return (
@@ -111,7 +123,7 @@ export const Reports = () => {
               Total time
             </Text>
             <Text ta="center" fz={25} fw="600">
-              {totalHours}
+              {formatTotalHours(totalHours)}
             </Text>
           </Box>
           <Box className={styles.cardDetail} size="sm">
@@ -137,6 +149,27 @@ export const Reports = () => {
             data={data}
             dataKey="day"
             series={[{ name: "hours", color: "violet.6" }]}
+            tooltipProps={{
+              content: ({ active, payload }) => {
+                if (active && payload && payload.length) {
+                  const { day, formattedTime } = payload[0].payload;
+                  return (
+                    <Flex
+                      gap={12}
+                      justify="space-between"
+                      className={styles.tooltip}
+                      align="center"
+                    >
+                      <Text size="xs">{day}</Text>
+                      <Text fw={600} size="sm">
+                        {formattedTime}
+                      </Text>
+                    </Flex>
+                  );
+                }
+                return null;
+              },
+            }}
           />
         </Box>
       </Box>

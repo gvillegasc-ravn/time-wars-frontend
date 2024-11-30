@@ -1,6 +1,6 @@
 import {
   AppShell,
-  Box,
+  Avatar,
   Burger,
   Group,
   NavLink,
@@ -10,9 +10,10 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ReactNode } from "react";
+import { useLocation } from "react-router-dom";
+import { FaSun, FaMoon } from "react-icons/fa";
 import { FaHouse } from "react-icons/fa6";
-import { BsGraphUpArrow } from "react-icons/bs";
-
+import { FaChartBar } from "react-icons/fa";
 interface LayoutProps {
   children: ReactNode;
 }
@@ -25,6 +26,8 @@ export const Layout = ({ children }: LayoutProps) => {
     setColorScheme(colorScheme === "dark" ? "light" : "dark");
   };
 
+  const location = useLocation();
+
   return (
     <AppShell
       header={{ height: 60 }}
@@ -33,7 +36,7 @@ export const Layout = ({ children }: LayoutProps) => {
     >
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
-          <Box>
+          <Group gap={16}>
             <Burger
               opened={opened}
               onClick={toggle}
@@ -41,21 +44,36 @@ export const Layout = ({ children }: LayoutProps) => {
               size="sm"
             />
             <Title size="lg">Time Wars</Title>
-          </Box>
+          </Group>
 
-          <Switch
-            label={colorScheme === "light" ? "Light mode" : "Dark mode"}
-            checked={colorScheme === "light"}
-            onChange={toggleColorScheme}
-          />
+          <Group gap={12}>
+            <Switch
+              label={
+                colorScheme === "light" ? (
+                  <FaSun size={20} />
+                ) : (
+                  <FaMoon size={20} />
+                )
+              }
+              checked={colorScheme === "light"}
+              onChange={toggleColorScheme}
+            />
+            <Avatar radius="xl" />
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        <NavLink href="/" label="Home" leftSection={<FaHouse />} active />
+        <NavLink
+          href="/"
+          label="Home"
+          leftSection={<FaHouse />}
+          active={location.pathname === "/"}
+        />
         <NavLink
           href="/reports"
           label="Dashboard"
-          leftSection={<BsGraphUpArrow />}
+          leftSection={<FaChartBar />}
+          active={location.pathname === "/reports"}
         />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>

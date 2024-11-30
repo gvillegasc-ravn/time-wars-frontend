@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styles from "./tablastyle.module.css";
-import { Box, Button, Flex, Table } from "@mantine/core";
-import { FaCheck } from "react-icons/fa";
+import styles from "./tablaReport.module.css";
+import { Box, Button, Flex, Switch, Table, Text } from "@mantine/core";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { MdOutlineCancel } from "react-icons/md";
 
 type Entry = {
   id: number;
@@ -11,6 +12,7 @@ type Entry = {
   clientName: string;
   projectName: string;
   userName: string;
+  approvedStatus: "APPROVED" | "REJECTED";
 };
 
 export const TableReport: React.FC = () => {
@@ -66,7 +68,7 @@ export const TableReport: React.FC = () => {
           year: "2-digit",
         })}
       </Table.Td>
-      <Table.Td>{`${Math.floor(
+      <Table.Td align="center">{`${Math.floor(
         calculateDuration(entry.startTime, entry.endTime || "") /
           (1000 * 60 * 60)
       )}h ${Math.floor(
@@ -75,7 +77,15 @@ export const TableReport: React.FC = () => {
           (1000 * 60)
       )}m`}</Table.Td>
       <Table.Td className={styles.check}>
-        <FaCheck />
+        {entry.approvedStatus ? (
+          entry.approvedStatus === "APPROVED" ? (
+            <FaRegCheckCircle size={20} color="green" />
+          ) : (
+            <MdOutlineCancel size={20} color="red" />
+          )
+        ) : (
+          ""
+        )}
       </Table.Td>
     </Table.Tr>
   ));
@@ -85,9 +95,36 @@ export const TableReport: React.FC = () => {
       <Table.Th>TIME ENTRY</Table.Th>
       <Table.Th>USER</Table.Th>
       <Table.Th>TIME</Table.Th>
-      <Table.Th>DURATION</Table.Th>
+      <Table.Th align="center">DURATION</Table.Th>
     </Table.Tr>
   );
+
+  const handleClick = (status: number) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      approvedStatus: status,
+      userId: 1,
+    });
+
+    fetch(
+      "https://faithful-literate-chigger.ngrok-free.app/api/v1/time-entries/change-approved-status",
+      {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      }
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.data) {
+          setListData(result.data);
+        }
+      })
+      .catch((error) => console.error(error));
+  };
 
   useEffect(() => {
     const requestOptions: RequestInit = {
@@ -105,30 +142,52 @@ export const TableReport: React.FC = () => {
       .then((response) => response.json())
       .then((result) => {
         if (result.data) {
-          console.log(result.data);
-
           setListData(result.data);
         }
       })
       .catch((error) => console.error(error));
   }, []);
   return (
-    <>
-      <div className={styles.container}>
-        <Button className={styles.buttom}>APPROVED</Button>
-        <Button className={styles.buttom}>REJECTED</Button>
-      </div>
-      <Box>
-        <Flex justify="space-between">
-          <div>TOTAL: {formatTotalDuration()}</div>
-          <div className={styles.rounding}>ROUNDING</div>
+    <Flex direction="column" gap="18px">
+      <Flex justify="flex-end">
+        <Flex gap={16}>
+          <Button className={styles.buttom} onClick={() => handleClick(1)}>
+            APPROVED
+          </Button>
+          <Button
+            className={styles.buttom}
+            onClick={() => handleClick(0)}
+            color="red"
+          >
+            REJECTED
+          </Button>
         </Flex>
+      </Flex>
+      <Box>
+        <Box className={styles.containerHeader}>
+          <Flex justify="space-between" align="center">
+            <Box className={styles.containerTotal}>
+              <Text size="xs" fw={500}>
+                TOTAL:{" "}
+                <Text span size="md" fw={600}>
+                  {formatTotalDuration()}
+                </Text>
+              </Text>
+            </Box>
+            <Switch defaultChecked label="Rounding" />
+          </Flex>
+        </Box>
+        <Table
+          captionSide="bottom"
+          verticalSpacing="16px"
+          withTableBorder
+          horizontalSpacing="lg"
+        >
+          <Table.Caption></Table.Caption>
+          <Table.Thead>{ths}</Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
+        </Table>
       </Box>
-      <Table captionSide="bottom" verticalSpacing="30px">
-        <Table.Caption>Filtered Entries</Table.Caption>
-        <Table.Thead>{ths}</Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-    </>
+    </Flex>
   );
 };

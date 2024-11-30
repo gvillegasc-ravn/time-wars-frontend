@@ -7,13 +7,13 @@ import { Layout } from "./components/Layout";
 
 function App() {
   return (
-    <MantineProvider withCssVariables withGlobalClasses withStaticClasses>
-      <Layout>
-        <BrowserRouter>
+    <BrowserRouter>
+      <MantineProvider withCssVariables withGlobalClasses withStaticClasses>
+        <Layout>
           <AppRouter />
-        </BrowserRouter>
-      </Layout>
-    </MantineProvider>
+        </Layout>
+      </MantineProvider>
+    </BrowserRouter>
   );
 }
 
