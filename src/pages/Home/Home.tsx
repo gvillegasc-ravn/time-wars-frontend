@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
+import { Layout } from "../../components/Layout";
+import { TableReport } from "../../components/TableReport";
 
 export const Home = () => {
-  return (
-    <div>Home</div>
-  )
-}
+  return <Layout children={<TableReport />} />;
+};

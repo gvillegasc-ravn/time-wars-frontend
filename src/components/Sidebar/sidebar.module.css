@@ -1,0 +1,80 @@
+.sideBar {
+  background-color: var(--mantine-color-dark-5);
+  height: 100%;
+  padding: 16px 0;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navList li {
+  list-style: none;
+}
+
+.contNav {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+.navList li a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 16px;
+  color: var(--mantine-color-dark-2);
+  font-size: 15px;
+  position: relative;
+  line-height: 24px;
+  overflow: hidden;
+  transition: color 0.4s;
+  background: transparent;
+}
+
+.navList li a::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 0;
+  right: 0;
+  top: 0;
+  border-right: 4px solid var(--mantine-color-red-5);
+  background: linear-gradient(
+    90deg,
+    rgba(186, 37, 37, 0) 0%,
+    rgba(210, 77, 77, 0.1) 100%
+  );
+  transform: translateX(100%); /* Start off-screen */
+  transition: transform 0.5s linear, width 0.5s linear; /* Smooth transitions */
+  will-change: transform, width;
+}
+
+.navList li a:hover::after,
+.navList li a.activeLink::after {
+  transform: translateX(0);
+  width: 100%;
+}
+
+.navList li a:hover,
+.navList li a.activeLink {
+  color: var(--mantine-color-red-5);
+}
+
+.navList li a i {
+  font-size: 24px;
+}
+
+.contLogo {
+  width: 100%;
+  text-align: center;
+}
+
+.logo {
+  width: 40px;
+}

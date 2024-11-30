@@ -5,6 +5,8 @@ import { createTheme, MantineProvider, Table } from "@mantine/core";
 import { themeOverride } from "./shared/theme/mantine-theme";
 import { TableReport } from "./components/TableReport";
 import "@mantine/core/styles.css";
+import { AppRouter } from "./shared/AppRouter";
+import { BrowserRouter } from "react-router-dom";
 
 const theme = createTheme(themeOverride);
 const elements = [
@@ -30,34 +32,9 @@ function App() {
       withStaticClasses
       defaultColorScheme="dark"
     >
-      <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Element position</Table.Th>
-            <Table.Th>Element name</Table.Th>
-            <Table.Th>Symbol</Table.Th>
-            <Table.Th>Atomic mass</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>{rows}</Table.Tbody>
-      </Table>
-      <TableReport />
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
     </MantineProvider>
   );
 }
