@@ -1,0 +1,31 @@
+.containerDetail {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: var(--mantine-color-gray-2);
+  border: 1px solid var(--mantine-color-gray-4);
+}
+
+.cardDetail {
+  color: var(--mantine-color-dark-4);
+  border-right: 1px solid var(--mantine-color-gray-4);
+  padding: 28px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cardDetail:last-child {
+  border-right: none;
+}
+
+.titleCard {
+  color: var(--mantine-color-gray-6);
+  font-weight: 500;
+}
+
+.containerChart {
+  border: 1px solid var(--mantine-color-gray-4);
+  border-top: none;
+  padding: 50px 20px;
+}

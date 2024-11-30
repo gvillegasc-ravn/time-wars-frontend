@@ -1,9 +1,20 @@
-import { AppShell, Burger, Group, NavLink, Skeleton } from "@mantine/core";
+import {
+  AppShell,
+  Box,
+  Burger,
+  Button,
+  Group,
+  NavLink,
+  Paper,
+  Skeleton,
+  Switch,
+  Title,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Sidebar } from "../Sidebar";
-import { Header } from "../Header";
 import { ReactNode } from "react";
 import { TbAdjustmentsAlt } from "react-icons/tb";
+import { FaHouse } from "react-icons/fa6";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,6 +23,11 @@ interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   const [opened, { toggle }] = useDisclosure();
 
+  const { setColorScheme, colorScheme } = useMantineColorScheme();
+  const toggleColorScheme = () => {
+    setColorScheme(colorScheme === "dark" ? "light" : "dark");
+  };
+
   return (
     <AppShell
       header={{ height: 60 }}
@@ -19,23 +35,30 @@ export const Layout = ({ children }: LayoutProps) => {
       padding="md"
     >
       <AppShell.Header>
-        <Group h="100%" px="md">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-          ss
+        <Group h="100%" px="md" justify="space-between">
+          <Box>
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              hiddenFrom="sm"
+              size="sm"
+            />
+            <Title size="lg">Time Wars</Title>
+          </Box>
+
+          <Switch
+            label={colorScheme === "light" ? "Light mode" : "Dark mode"}
+            checked={colorScheme === "light"}
+            onChange={toggleColorScheme}
+          />
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
+        <NavLink href="/" label="Home" leftSection={<FaHouse />} active />
         <NavLink
-          href="/"
-          label="With icon"
-          leftSection={<TbAdjustmentsAlt />}
-          active
-        />
-        <NavLink
-          href="#required-for-focus"
+          href="/reports"
           label="With right section"
           leftSection={<TbAdjustmentsAlt />}
-          rightSection={<TbAdjustmentsAlt />}
         />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>

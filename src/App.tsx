@@ -1,40 +1,18 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { createTheme, MantineProvider, Table } from "@mantine/core";
-import { themeOverride } from "./shared/theme/mantine-theme";
-import { TableReport } from "./components/TableReport";
+import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { AppRouter } from "./shared/AppRouter";
 import { BrowserRouter } from "react-router-dom";
+import { Layout } from "./components/Layout";
 
-const theme = createTheme(themeOverride);
-const elements = [
-  { position: 6, mass: 12.011, symbol: "C", name: "Carbon" },
-  { position: 7, mass: 14.007, symbol: "N", name: "Nitrogen" },
-  { position: 39, mass: 88.906, symbol: "Y", name: "Yttrium" },
-  { position: 56, mass: 137.33, symbol: "Ba", name: "Barium" },
-  { position: 58, mass: 140.12, symbol: "Ce", name: "Cerium" },
-];
 function App() {
-  const rows = elements.map((element) => (
-    <Table.Tr key={element.name}>
-      <Table.Td>{element.position}</Table.Td>
-      <Table.Td>{element.name}</Table.Td>
-      <Table.Td>{element.symbol}</Table.Td>
-      <Table.Td>{element.mass}</Table.Td>
-    </Table.Tr>
-  ));
   return (
-    <MantineProvider
-      withCssVariables
-      withGlobalClasses
-      withStaticClasses
-      defaultColorScheme="dark"
-    >
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
+    <MantineProvider withCssVariables withGlobalClasses withStaticClasses>
+      <Layout>
+        <BrowserRouter>
+          <AppRouter />
+        </BrowserRouter>
+      </Layout>
     </MantineProvider>
   );
 }
