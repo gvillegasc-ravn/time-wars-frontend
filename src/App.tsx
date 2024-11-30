@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { createTheme, MantineProvider, Table } from "@mantine/core";
 import { themeOverride } from "./shared/theme/mantine-theme";
-import { TableReport } from "./components/TableReport/TableReport";
+import { TableReport } from "./components/TableReport";
 
 const theme = createTheme(themeOverride);
 const elements = [
