@@ -1,65 +1,22 @@
-import React from 'react';
-import styles from './tablastyle.module.css';
-import { Box, Button, Flex, Table } from '@mantine/core';
+import React, { useEffect, useState } from "react";
+import styles from "./tablastyle.module.css";
+import { Box, Button, Flex, Table } from "@mantine/core";
 import { FaCheck } from "react-icons/fa";
 
+type Entry = {
+  id: number;
+  startTime: string;
+  endTime: string | null;
+  description: string | null;
+  clientName: string;
+  projectName: string;
+  userName: string;
+};
+
 export const TableReport: React.FC = () => {
-  const das = [
-    {
-      result: true,
-      data: [
-        {
-          id: 4,
-          startTime: "2024-11-30T14:30:00Z",
-          endTime: "2024-11-30T14:40:00Z",
-          description: null,
-          clientName: "Lucidchart",
-          projectName: "Project A",
-          userId: 3,
-          userName: "Jackeline Quispe",
-          approvedStatus: "PENDING",
-        },
-        {
-          id: 3,
-          startTime: "2024-11-30T14:30:00Z",
-          endTime: null,
-          description: null,
-          clientName: "Lucidchart",
-          projectName: "Project A",
-          userId: 2,
-          userName: "Gerardo Villegas",
-          approvedStatus: "PENDING",
-        },
-        {
-          id: 2,
-          startTime: "2024-11-30T14:30:00Z",
-          endTime: "2024-11-30T16:30:00Z",
-          description: "Creating the repository",
-          clientName: "Lucidchart",
-          projectName: "Project A",
-          userId: 1,
-          userName: "Andre Gallegos",
-          approvedStatus: "REJECTED",
-        },
-        {
-          id: 1,
-          startTime: "2024-11-30T19:30:00Z",
-          endTime: null,
-          description: null,
-          clientName: "Lucidchart",
-          projectName: "Project A",
-          userId: 1,
-          userName: "Andre Gallegos",
-          approvedStatus: "REJECTED",
-        },
-      ],
-      timestamp: "2024-11-30T11:08:02.803+00:00",
-      status: 200,
-    },
-  ];
+  const [listData, setListData] = useState<Entry[]>([]);
 
-  const filteredData = das[0].data.filter((entry) => entry.endTime !== null);
-
+  const filteredData = listData.filter((entry) => entry.endTime !== null);
 
   const calculateDuration = (start: string, end: string): number => {
     const startDate = new Date(start);
@@ -76,7 +33,9 @@ export const TableReport: React.FC = () => {
 
   const formatTotalDuration = (): string => {
     const hours = Math.floor(totalDuration / (1000 * 60 * 60));
-    const minutes = Math.floor((totalDuration % (1000 * 60 * 60)) / (1000 * 60));
+    const minutes = Math.floor(
+      (totalDuration % (1000 * 60 * 60)) / (1000 * 60)
+    );
     return `${hours}h ${minutes}m`;
   };
 
@@ -85,31 +44,36 @@ export const TableReport: React.FC = () => {
       <Table.Td>{entry.description || "No Description"}</Table.Td>
       <Table.Td>{entry.userName}</Table.Td>
       <Table.Td>
-      {`${new Date(entry.startTime).toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true,
-      })} - ${
-        entry.endTime
-          ? new Date(entry.endTime).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: true,
-            })
-          : ""
-      }`}
-      <br />
-      {new Date(entry.startTime).toLocaleDateString([], {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
-      })}
-    </Table.Td>
-      <Table.Td>{`${Math.floor(calculateDuration(entry.startTime, entry.endTime || "") / (1000 * 60 * 60))}h ${
-        Math.floor((calculateDuration(entry.startTime, entry.endTime || "") % (1000 * 60 * 60)) / (1000 * 60))
-      }m`}</Table.Td>
+        {`${new Date(entry.startTime).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        })} - ${
+          entry.endTime
+            ? new Date(entry.endTime).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true,
+              })
+            : ""
+        }`}
+        <br />
+        {new Date(entry.startTime).toLocaleDateString([], {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        })}
+      </Table.Td>
+      <Table.Td>{`${Math.floor(
+        calculateDuration(entry.startTime, entry.endTime || "") /
+          (1000 * 60 * 60)
+      )}h ${Math.floor(
+        (calculateDuration(entry.startTime, entry.endTime || "") %
+          (1000 * 60 * 60)) /
+          (1000 * 60)
+      )}m`}</Table.Td>
       <Table.Td className={styles.check}>
         <FaCheck />
       </Table.Td>
@@ -125,6 +89,29 @@ export const TableReport: React.FC = () => {
     </Table.Tr>
   );
 
+  useEffect(() => {
+    const requestOptions: RequestInit = {
+      method: "GET",
+      redirect: "follow",
+      headers: new Headers({
+        "ngrok-skip-browser-warning": "69420",
+      }),
+    };
+
+    fetch(
+      "https://faithful-literate-chigger.ngrok-free.app/api/v1/time-entries/get-all",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.data) {
+          console.log(result.data);
+
+          setListData(result.data);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
   return (
     <>
       <div className={styles.container}>
@@ -145,5 +132,3 @@ export const TableReport: React.FC = () => {
     </>
   );
 };
-
-

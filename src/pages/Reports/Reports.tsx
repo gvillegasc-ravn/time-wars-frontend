@@ -67,26 +67,29 @@ export const Reports = () => {
   const [data, setData] = useState<{ day: string; hours: number }[]>([]);
   const [totalHours, setTotalHours] = useState<number>(0);
 
-  const requestOptions: RequestInit = {
-    method: "GET",
-    redirect: "follow",
-    headers: new Headers({
-      "ngrok-skip-browser-warning": "69420",
-    }),
-  };
-
- 
   useEffect(() => {
+    const requestOptions: RequestInit = {
+      method: "GET",
+      redirect: "follow",
+      headers: new Headers({
+        "ngrok-skip-browser-warning": "69420",
+      }),
+    };
+
     fetch(
       "https://faithful-literate-chigger.ngrok-free.app/api/v1/time-entries/get-all",
       requestOptions
     )
       .then((response) => response.json())
       .then((result) => {
-        setListData(result.data);
+        if (result.data) {
+          console.log(result.data);
+
+          setListData(result.data);
+        }
       })
       .catch((error) => console.error(error));
-  });
+  }, []);
 
   useEffect(() => {
     const totalData = getTotalHoursPerDay(listData);
