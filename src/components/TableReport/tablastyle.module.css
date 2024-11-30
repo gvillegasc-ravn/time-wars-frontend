@@ -1,0 +1,84 @@
+/* Contenedor de la tabla */
+.tableContainer {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Total de horas (encabezado superior) */
+.totalHours {
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: right;
+}
+
+/* Estilos generales para la tabla */
+.customTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.customTable th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 8px;
+  border-bottom: 2px solid #ddd;
+}
+
+.customTable td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+}
+
+/* Alternancia de colores para las filas */
+.customTable tr:nth-child(even) {
+  background-color: #333;
+}
+
+/* Hover en las filas */
+.customTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Estilo del tiempo total en la cabecera */
+.totalCell {
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: right;
+}
+
+.user_time_duration {
+  width: 150px;
+}
+
+.rounding {
+  width: 100%;
+  text-align: right;
+}
+
+.rows{
+  margin: 5000px;
+}
+
+.check{
+  width: 150px;
+  text-align: center;
+}
+
+.button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
