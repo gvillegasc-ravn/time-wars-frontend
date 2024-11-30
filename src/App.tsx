@@ -4,6 +4,7 @@ import "./App.css";
 import { createTheme, MantineProvider, Table } from "@mantine/core";
 import { themeOverride } from "./shared/theme/mantine-theme";
 import { TableReport } from "./components/TableReport";
+import "@mantine/core/styles.css";
 
 const theme = createTheme(themeOverride);
 const elements = [
@@ -29,7 +30,18 @@ function App() {
       withStaticClasses
       defaultColorScheme="dark"
     >
-      <TableReport/>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Element position</Table.Th>
+            <Table.Th>Element name</Table.Th>
+            <Table.Th>Symbol</Table.Th>
+            <Table.Th>Atomic mass</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>{rows}</Table.Tbody>
+      </Table>
+      <TableReport />
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
