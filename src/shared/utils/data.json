@@ -1,0 +1,23 @@
+
+{  "result": true,
+    "data": [
+      {
+        "id": 1,
+        "startTime": "2024-11-30T19:30:00Z",
+        "endTime": null,
+        "description": null,
+        "clientName": "Lucidchart",
+        "projectName": "Project A"
+      },
+      {
+        "id": 2,
+        "startTime": "2024-11-30T14:30:00Z",
+        "endTime": "2024-11-30T16:30:00Z",
+        "description": "Creating the repository",
+        "clientName": "Lucidchart",
+        "projectName": "Project A"
+      }
+    ],
+    "timestamp": "2024-11-30T08:21:23.015+00:00",
+    "status": 200
+  }

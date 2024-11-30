@@ -2,19 +2,16 @@ import {
   AppShell,
   Box,
   Burger,
-  Button,
   Group,
   NavLink,
-  Paper,
-  Skeleton,
   Switch,
   Title,
   useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ReactNode } from "react";
-import { TbAdjustmentsAlt } from "react-icons/tb";
 import { FaHouse } from "react-icons/fa6";
+import { BsGraphUpArrow } from "react-icons/bs";
 
 interface LayoutProps {
   children: ReactNode;
@@ -57,8 +54,8 @@ export const Layout = ({ children }: LayoutProps) => {
         <NavLink href="/" label="Home" leftSection={<FaHouse />} active />
         <NavLink
           href="/reports"
-          label="With right section"
-          leftSection={<TbAdjustmentsAlt />}
+          label="Dashboard"
+          leftSection={<BsGraphUpArrow />}
         />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>
